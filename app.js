@@ -8,8 +8,7 @@ const ejsMate = require("ejs-Mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const {listingSchema} = require("./schema.js");
-const multer = require("multer")
-const upload = multer().single("listing[image]")
+
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -31,10 +30,7 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
 
-app.get("/", upload,(req,res) =>{
-    console.log(req.body)
-    console.log(req.file)
-});
+
 
 
 const validateListing = (req,res,next) => {
