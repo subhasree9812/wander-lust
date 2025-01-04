@@ -108,21 +108,32 @@ app.get("/listings",wrapAsync(async (req,res) =>{
     }));
 
     //Reviews
-    //Post route
+    //Post Review Route
     app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req,res)=>{
-    let listing =await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
+        let {id}=req.params;
+        let listing =await Listing.findById(req.params.id);
+        let newReview = new Review(req.body.review);
+    
+        listing.reviews.push(newReview);
+    
+        await newReview.save();
+        await listing.save();
+    
+        console.log("new review saved");
+            res.redirect(`/listings/${id}`);
+    
+    
+        }));
 
-    listing.reviews.push(newReview);
+//Delete Review Route
+app.delete("/listngs/:id/reviews/:reviewId", wrapAsync(async (req,res) =>{
+    let {id, reviewId} =req.params;
+    await Listing.findByIdAndUpdate(id, {$pull: {reviews:reviewId}});
+    await Review.findByIdAndDelete(reviewId);
 
-    await newReview.save();
-    await listing.save();
+    res.redirect(`/listings/${id}`);
+}))
 
-    console.log("new review saved");
-    res.send("new review saved");
-
-
-    }));
 
 // app.get("/testListing",async (req,res) =>{
 //    let sampleListing = new Listing({
