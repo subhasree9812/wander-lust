@@ -9,11 +9,11 @@ const path= require("path");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
 
-const sessionOptions = {
+const sessionOptions = ({
     secret: "mysupersecretstring",
     resave: false,
     saveUnintialized: true,
-};
+});
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -25,5 +25,6 @@ app.get("/register", (req,res)=>{
 });
 
 app.get("/hello" ,(req, res) =>{
-    res.render("page.ejs", {name: express.session.name});
+    res.locals.messages = req.flash("success");
+    res.render("page.ejs", {name: req.session.name});
 });
