@@ -12,7 +12,7 @@ app.set("views", path.join(__dirname,"views"));
 const sessionOptions = ({
     secret: "mysupersecretstring",
     resave: false,
-    saveUnintialized: true,
+    saveUninitialized: true,
 });
 app.use(session(sessionOptions));
 app.use(flash());
