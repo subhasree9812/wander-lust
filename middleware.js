@@ -49,13 +49,36 @@ module.exports.validateReview = (req,res,next) => {
          }
 }
 
-module.exports.isReviewAuthor =async (req,res,next) =>{
-    let {id,reviewId} = req.params;
-        let review = await Review.findById(reviewId);
+// module.exports.isReviewAuthor =async (req,res,next) =>{
+//     let {id,reviewId} = req.params;
+//         let review = await Review.findById(reviewId);
         
-        if(!review.author.equals(res.locals.currUser._id)){
-            req.flash("error","You are not the author of this review");
-            return res.redirect(`/listings/${id}`);
-        }
-        next();
+//         if(!review.author.equals(res.locals.currUser._id)){
+//             req.flash("error","You are not the author of this review");
+//             return res.redirect(`/listings/${id}`);
+//         }
+//         next();
+// };
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+    let { id, reviewid } = req.params;  // Fix variable name
+    let review = await Review.findById(reviewid);
+
+    if (!review) {
+        req.flash("error", "Review not found!");
+        return res.redirect(`/listings/${id}`);
+    }
+
+    if (!res.locals.currUser) {
+        req.flash("error", "You must be logged in!");
+        return res.redirect("/login");
+    }
+
+    if (!review.author.equals(res.locals.currUser._id)) {
+        req.flash("error", "You are not the author of this review!");
+        return res.redirect(`/listings/${id}`);
+    }
+
+    next();
 };
+ 
