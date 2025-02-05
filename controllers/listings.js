@@ -1,12 +1,12 @@
 const Listing = require("../models/listing");
 
-module.exports.index=(async (req,res) =>{
+module.exports.index=async (req,res) =>{
     const allListings = await Listing.find({});
           res.render("listings/index.ejs",{allListings});
-      });
+      };
 
       module.exports.renderNewForm = (req, res)=>{
-        re.render("listings/new.ejs");
+        res.redirect("listings");
       };
 
       module.exports.showListing = async (req,res) =>{
