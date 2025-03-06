@@ -14,8 +14,8 @@ router
 .get( wrapAsync(listingController.index))
 .post(
     isLoggedIn,
-     validateListing, 
      upload.single('listing[image]'),
+     validateListing, 
     wrapAsync(listingController.createListing));
  
 
@@ -37,8 +37,17 @@ router
   
 
     //Edit Route
-    router.get("/:id/edit",isLoggedIn, isOwner,
-        wrapAsync(listingController.renderEditForm));
-
+    module.exports.renderEditForm = async (req, res) => {
+        let { id } = req.params;
+        const listing = await Listing.findById(id);
+        if (!listing) {
+          req.flash("error", "Listing you requested for does not exist.");
+          res.redirect("/listing");
+        }
+        let originalImageUrl = listing.image.url;
+        originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_150");
+        res.render("listings/edit.ejs", { listing,originalImageUrl });
+      };
    
     module.exports = router;
+    
