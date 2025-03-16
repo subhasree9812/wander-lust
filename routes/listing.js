@@ -9,8 +9,8 @@ const{storage}=require("../cloudConfig.js");
 const upload = multer({storage});
 
 
-router
-.route("/")
+router.
+route("/")
 .get( wrapAsync(listingController.index))
 .post(
     isLoggedIn,
@@ -38,6 +38,9 @@ router
   
 
     //Edit Route
+    router
+    .route("/:id/edit")
+    .get(isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm));
     module.exports.renderEditForm = async (req, res) => {
         let { id } = req.params;
         const listing = await Listing.findById(id);
